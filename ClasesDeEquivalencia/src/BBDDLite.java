@@ -14,7 +14,7 @@ public class BBDDLite {
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
-            System.out.println("Error al crear la tabla: " + e.getMessage());
+            System.out.println("\n Error al crear la tabla: " + e.getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ public class BBDDLite {
                 return new Cliente(rs.getString("dni"), rs.getDouble("saldo"));
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar usuario: " + e.getMessage());
+            System.out.println("\n Error al buscar usuario: " + e.getMessage());
         }
         return null;
     }
@@ -37,9 +37,40 @@ public class BBDDLite {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
-            System.out.println("Usuario añadido correctamente.");
+            System.out.println("\n Usuario añadido correctamente.");
         } catch (SQLException e) {
-            System.out.println("Error al añadir usuario: " + e.getMessage());
+            System.out.println("\n Error al añadir usuario: " + e.getMessage());
         }
     }
+
+    // Método para ver toda la información de la BBDD
+
+    public static void verInformacion() {
+        String sql = "SELECT * FROM Usuarios";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                System.out.println("\n DNI: " + rs.getString("dni"));
+                System.out.println(" Saldo: " + rs.getDouble("saldo") + "€");
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al ver información: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        // Crear la tabla
+        BBDDLite.crearTabla();
+        System.out.println("\n Tabla creada correctamente.");
+
+        // Agregar un usuario
+        BBDDLite.agregarUsuario("12345678Z");
+        System.out.println("\n Usuario agregado correctamente.");
+
+        // Ver la información de la base de datos
+        BBDDLite.verInformacion();
+    }
+
 }
