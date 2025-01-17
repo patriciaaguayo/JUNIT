@@ -32,6 +32,21 @@ public class BBDDLite {
         return null;
     }
 
+    public static boolean clienteExiste(String dni) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM Usuarios WHERE dni = '" + dni + "'")) {
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("\n Error al conectar con la base de datos: " + e.getMessage());
+            return false;
+        }
+    }
+
     public static void agregarUsuario(String dni) {
         String sql = "INSERT INTO Usuarios (dni, saldo) VALUES ('" + dni + "', 0)";
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
@@ -40,6 +55,41 @@ public class BBDDLite {
             System.out.println("\n Usuario añadido correctamente.");
         } catch (SQLException e) {
             System.out.println("\n Error al añadir usuario: " + e.getMessage());
+        }
+    }
+
+    // Método para actualizar el saldo de un usuario
+
+    public static void actualizarSaldo(String dni, double nuevoSaldo) {
+        String sql = "UPDATE Usuarios SET saldo = ? WHERE dni = ?";
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, nuevoSaldo);
+            pstmt.setString(2, dni);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("\n Error al actualizar el saldo: " + e.getMessage());
+        }
+    }
+
+    // Método para mostrar el saldo
+
+    public static void verSaldo(String dni) {
+        String sql = "SELECT saldo FROM Usuarios WHERE dni = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, dni);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("\n Actualmente tienes un saldo de " + rs.getDouble("saldo") + "€");
+
+                } else {
+                    System.out.println("\n No se encontró información para el DNI " + dni);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\n Error al ver información: " + e.getMessage());
         }
     }
 
