@@ -52,7 +52,7 @@ public class BBDDLite {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
-            System.out.println("\n Usuario añadido correctamente.");
+
         } catch (SQLException e) {
             System.out.println("\n Error al añadir usuario: " + e.getMessage());
         }
@@ -114,10 +114,6 @@ public class BBDDLite {
         // Crear la tabla
         BBDDLite.crearTabla();
         System.out.println("\n Tabla creada correctamente.");
-
-        // Agregar un usuario
-        BBDDLite.agregarUsuario("12345678Z");
-        System.out.println("\n Usuario agregado correctamente.");
 
         // Ver la información de la base de datos
         BBDDLite.verInformacion();
