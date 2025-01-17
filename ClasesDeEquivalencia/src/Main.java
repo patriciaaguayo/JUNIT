@@ -33,8 +33,8 @@ public class Main {
                 case 1:
                     String dniBuscar = ingresarDNI(leer);
                     Cliente cliente = BBDDLite.obtenerCliente(dniBuscar);
-                    saldo = cliente.getSaldo();
                     if (cliente != null) {
+                        saldo = cliente.getSaldo();
                         System.out.println("\n Usuario encontrado. Tienes un saldo de " + cliente.getSaldo() + "€");
                         mostrarMenuCliente(leer, cliente, saldo);
                     } else {
@@ -248,17 +248,17 @@ public class Main {
         String dni;
         String[] letras = null;
         do {
-            System.out.print("Ingrese el DNI (8 dígitos y una letra): ");
+            System.out.print("\n Introduce el DNI (8 dígitos y una letra): ");
             dni = leer.next().toUpperCase();
             if (!dni.matches("\\d{8}[A-Za-z]")) {
-                System.out.println("El formato del DNI no es correcto.");
+                System.out.println("\n El formato del DNI no es correcto.");
             } else {
                 letras = new String[]{"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"};
                 int numero = Integer.parseInt(dni.substring(0, 8));
                 int resto = numero % 23;
                 String letraCorrecta = letras[resto];
                 if (!dni.substring(8).equals(letraCorrecta)) {
-                    System.out.println("La letra del DNI no corresponde con el número.");
+                    System.out.println("\n La letra del DNI no corresponde con el número.");
                 }
             }
         } while (!dni.matches("\\d{8}[A-Za-z]") || !dni.substring(8).equals(letras[Integer.parseInt(dni.substring(0, 8)) % 23]));
