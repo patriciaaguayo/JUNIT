@@ -110,7 +110,7 @@ public class BBDDLite {
         }
     }
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         // Crear la tabla
         BBDDLite.crearTabla();
         System.out.println("\n Tabla creada correctamente.");
